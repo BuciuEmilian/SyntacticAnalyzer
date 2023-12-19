@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ADR {
     enum State {
@@ -18,23 +15,40 @@ public class ADR {
 
     public ADR() {
         this.state = State.NORMAL;
-        this.index = 1;
+        this.index = 0;
         stack = new Stack<>();
         input = new Stack<>();
     }
 
-    String getProductions(Grammar grammar) {
-        return "";
+    private void pushList(List<Symbol> symbols) {
+        input.push(new Symbol("@", SymbolType.AUX));
+        ListIterator<Symbol> li = symbols.listIterator(symbols.size());
+        while (li.hasPrevious()) {
+            input.push(li.previous());
+        }
     }
 
-    String analyse(Grammar grammar, Symbol startSymbol, String sequence) {
-        input.push(startSymbol);
+    private void popList() {
+        while (!input.peek().getName().equals("@")) {
+            input.pop();
+        }
+        input.pop();
+    }
+
+    public void reset() {
+        index = 0;
+        input.clear();
+        stack.clear();
+    }
+
+    public String analyse(Grammar grammar, String sequence) throws Exception {
+        input.push(grammar.getStartSymbol());
         //Cattimp ((s!=t) si (s!=e)) executa
         while (state != State.END && state != State.ERROR) {
             // daca (s=q)
             if (state == State.NORMAL) {
                 // daca beta = epsilon
-                if (stack.isEmpty()) {
+                if (input.isEmpty()) {
                     // daca i=n+1
                     if (index == sequence.length())         // SUCCESS
                         state = State.END;
@@ -43,20 +57,29 @@ public class ADR {
                 }
                 else {
                     // daca varf(beta) = un neterminal A
-                    if (input.peek().isNonterminal()) {     // EXPANDARE
-                        Symbol A = input.pop();
-                        //stack.push(A1);   // partea stanga a primei regulii de productie care l implica pe A
-                        //input.push(Y1));  // partea dreapta a primei regulii de productie care l implica pe A
+                    Symbol symbol = input.peek();
+                    if (symbol.isNonterminal()) {     // EXPANDARE
+                        input.pop();
+                        stack.push(new Symbol(symbol.getName() + " 0", SymbolType.AUX));   // partea stanga a primei regulii de productie care l implica pe A
+                        pushList(grammar.getProductionResult(symbol, 0));                // partea dreapta a primei regulii de productie care l implica pe A
+
                     }
                     else {
                         // daca varf(beta) = terminalul xi
-                        if (input.peek().isTerminal()) {    // AVANS
-                            index++;
-                            Symbol xi = input.pop();
-                            stack.push(xi);
+                        if (symbol.isTerminal()) {    // AVANS
+                            String curr = String.valueOf(sequence.charAt(index));
+                            if (symbol.getName().equals(curr)) {
+                                index++;
+                                input.pop();
+                                stack.push(symbol);
+                            }
+                            else {                              // INSUCCES DE MOMENT (a != aj) - mismatch in secventa
+                                state = State.BACK;
+                            }
                         }
-                        else {                              // INSUCCES DE MOMENT (a != aj) - mismatch in secventa
-                            state = State.BACK;
+                        else {
+                            //System.out.println("EROARE");
+                            input.pop();
                         }
                     }
                 }
@@ -65,30 +88,32 @@ public class ADR {
                 // daca s=r
                 if (state == State.BACK) {
                     // daca varf(alfa) = un terminal a
-                    if (stack.peek().isTerminal()) {            // REVENIRE
+                    Symbol symbol = stack.peek();
+                    if (symbol.isTerminal()) {            // REVENIRE
                         index--;
                         Symbol a = stack.pop();
                         input.push(a);
                     }
                     else {  // varf(alfa) un Aj oarecare (indicatie pt A -> Y(j+1))
+                        Pair<String, Integer> data = symbol.getSymbolData();
                         // daca exista r.p. A -> Y(j+1)
-                        if(true)                            // ALTA INCERCARE
-                        {
+                        List<Symbol> rules = grammar.getProductionResult(data.getFirst(), data.getSecond() + 1);
+                        if (!rules.isEmpty()) {                            // ALTA INCERCARE
                             state = State.NORMAL;
-                            Symbol Aj = stack.pop();
-                            //stack.push(A(j+1)); // partea stanga a urmatoarei reguli de productie care l implica pe A
-                            Symbol Yj = input.pop();
-                            //input.push(Y(j+1)); // partea dreapta a urmatoarei reguli de productie care l implica pe A
+                            stack.pop();
+                            stack.push(new Symbol(data.getFirst() + " " + (data.getSecond() + 1), SymbolType.AUX)); // partea stanga a urmatoarei reguli de productie care l implica pe A
+                            popList();
+                            pushList(rules); // partea dreapta a urmatoarei reguli de productie care l implica pe A
                         }
                         else
                         {
                             // daca i=1 si A=S
-                            if (index == 1 && stack.peek() == grammar.getStartSymbol()) { // EROARE
+                            if (index == 1 && Objects.equals(stack.peek().getSymbolData().getFirst(), grammar.getStartSymbol().getName())) { // EROARE
                                 state = State.ERROR;
                             }
                             else {
                                 Symbol Aj = stack.pop();
-                                input.push(Aj);
+                                input.push(new Symbol(Aj.getSymbolData().getFirst(), SymbolType.NONTERMINAL));
                             }
                         }
                     }
@@ -97,10 +122,22 @@ public class ADR {
         }
         // daca s=e
         if (state == State.ERROR) {
-            return "";                          // tipareste Eroare
+            return "IMPOSIBIL";                          // tipareste Eroare
         }
         else {
-            return getProductions(grammar);     // constructie_sir_prod(G, alfa)
+            return getProductions();     // constructie_sir_prod(G, alfa)
         }
+    }
+
+    private String getProductions() {
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            Symbol symbol = stack.pop();
+            if (symbol.isAux()) {
+                sb.append(symbol.getName());
+            }
+        }
+        sb.reverse();
+        return sb.toString();
     }
 }

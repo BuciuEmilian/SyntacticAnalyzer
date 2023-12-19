@@ -1,5 +1,5 @@
 enum SymbolType {
     TERMINAL,
     NONTERMINAL,
-    PRODUCTION
+    AUX
 }

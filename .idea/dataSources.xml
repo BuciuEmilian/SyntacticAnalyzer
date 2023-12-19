@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="bugsbunny@baxbaniidb.c7vcmmeeoba6.eu-north-1.rds.amazonaws.com" uuid="fe75a97d-d3c5-4c1e-b42d-b88dfd8bd3f9">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://baxbaniidb.c7vcmmeeoba6.eu-north-1.rds.amazonaws.com:1433;database=bugsbunny</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

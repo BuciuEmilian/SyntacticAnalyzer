@@ -1,3 +1,2 @@
-S -> aSbS
-S -> aS
-S -> c
+@S@ ::= a@S@b@S@
+@S@ ::= c
