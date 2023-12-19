@@ -1,0 +1,4 @@
+@S@ ::= begin@SList@end
+@S@ ::= stmt
+@SList@ ::= @S@
+@SList@ ::= @S@;@SList@

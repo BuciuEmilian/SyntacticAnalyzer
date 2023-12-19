@@ -78,7 +78,6 @@ public class ADR {
                             }
                         }
                         else {
-                            //System.out.println("EROARE");
                             input.pop();
                         }
                     }
@@ -98,7 +97,7 @@ public class ADR {
                         Pair<String, Integer> data = symbol.getSymbolData();
                         // daca exista r.p. A -> Y(j+1)
                         List<Symbol> rules = grammar.getProductionResult(data.getFirst(), data.getSecond() + 1);
-                        if (!rules.isEmpty()) {                            // ALTA INCERCARE
+                        if (!rules.isEmpty()) {                            // ALTA INCERCARE 1
                             state = State.NORMAL;
                             stack.pop();
                             stack.push(new Symbol(data.getFirst() + " " + (data.getSecond() + 1), SymbolType.AUX)); // partea stanga a urmatoarei reguli de productie care l implica pe A
@@ -108,11 +107,12 @@ public class ADR {
                         else
                         {
                             // daca i=1 si A=S
-                            if (index == 1 && Objects.equals(stack.peek().getSymbolData().getFirst(), grammar.getStartSymbol().getName())) { // EROARE
+                            if (index == 0 && Objects.equals(symbol.getSymbolData().getFirst(), grammar.getStartSymbol().getName())) { // EROARE
                                 state = State.ERROR;
                             }
-                            else {
+                            else {                              // ALTA INCERCARE 2
                                 Symbol Aj = stack.pop();
+                                input.pop();
                                 input.push(new Symbol(Aj.getSymbolData().getFirst(), SymbolType.NONTERMINAL));
                             }
                         }
@@ -129,15 +129,23 @@ public class ADR {
         }
     }
 
-    private String getProductions() {
-        StringBuilder sb = new StringBuilder();
+    private String getProductions() throws Exception {
+        List<String> lst = new ArrayList<>();
         while (!stack.isEmpty()) {
             Symbol symbol = stack.pop();
             if (symbol.isAux()) {
-                sb.append(symbol.getName());
+                Pair<String, Integer> data = symbol.getSymbolData();
+                lst.add(data.getFirst() + data.getSecond());
             }
         }
-        sb.reverse();
+        StringBuilder sb = new StringBuilder();
+        ListIterator<String> li = lst.listIterator(lst.size());
+        while (li.hasPrevious()) {
+            sb.append(li.previous());
+            sb.append(" ");
+        }
+
         return sb.toString();
     }
 }
+
