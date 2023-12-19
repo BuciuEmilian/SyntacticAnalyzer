@@ -2,10 +2,10 @@ import java.util.*;
 
 public class ADR {
     enum State {
-        NORMAL,
-        BACK,
-        END,
-        ERROR
+        NORMAL,  // q
+        BACK, // r
+        END,  // t
+        ERROR  // e
     }
 
     private State state;
