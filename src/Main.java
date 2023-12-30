@@ -43,6 +43,7 @@ public class Main {
         List<String> lines = Files.readAllLines(Path.of("inputs/cpp.txt"));
         Grammar grammar = new Grammar(lines);
         ADR2 adr = new ADR2();
+        /// AICI TREBUIE SCHIMBAT URI-UL SA MEARGA LOCAL
         List<String> inp_lines = Files.readAllLines(Path.of("C:\\Proiecte SSD\\Python\\Lab5LFTC\\outputs\\output_file.txt"));
         System.out.println(adr.analyse(grammar, inp_lines.get(0)
                 ));
