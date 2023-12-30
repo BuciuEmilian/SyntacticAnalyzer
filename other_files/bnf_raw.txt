@@ -1,0 +1,222 @@
+[1]. Specificarea MLP C++ in Backus Naur
+
+FIP:
+..
+using -1
+namespace -1
+std -1
+
+sequence: [..., 'u', 's', 'i', 'n', 'g', ...]
+
+@program@ -> [[Symbol(lista_importuri), Symbol(u), Symbol(s), ...]]
+
+String curr = String.valueOf(sequence.charAt(index));
+if (symbol.getName().equals(curr))
+
+
+..
+
+<program> ::= <lista_importuri> using namespace std; int main() {<lista_instructiuni> return 0;}
+
+<lista_importuri> ::= <import> | <import><lista_importuri>
+
+<import> ::= #include < <librarie> >
+
+<librarie> ::= <sir_caractere>.<extensie>
+
+<extensie> ::= .h | secv-vida
+
+<sir_caractere> ::= <ch><sir_caractere> | <ch>
+
+<ch> ::= [a-zA-Z0-9_ ]
+
+<lista_instructiuni> ::= <instructiune><lista_instructiuni> | <instructiune>
+<instructiune> ::= <atribuire> | <ciclare> | <intrare> | <iesire> | <conditional> | <apeluri de functii> | <declarare> | <definire_struct> | secv-vida
+
+-- IDENTIFICATORI --
+<id> ::= [a-zA-Z] | [a-zA-Z]<sir_caractere>
+
+-- CONSTANTE ( https://cplusplus.com/doc/tutorial/constants/ )--
+<const> ::= '<ch>' | '<ch_special>' | <numar_intreg> | <numar_real> | <numar_hexa> | <numar_binar> | <numar_octal>
+<ch_special> ::= \n | \r | \t | \v | \b | \f | \a | \' | \" | \?
+<numar_intreg> ::= <numar_intreg_fara_mod> | <numar_intreg_fara_mod><modificator_tip_intreg>
+<numar_intreg_fara_mod> ::= <semn><cifra> | <semn><cifra_nenula><sir_cifre>
+<modificator_tip_intreg> ::= u | U | l | L | ll | LL
+
+<numar_pozitiv> ::= <cifra> | <cifra_nenula><sir_cifre>
+<sir_cifre> ::= <cifra> | <cifra><sir_cifre>
+<cifra> ::= [0-9]
+<cifra_nenula> ::= [1-9]
+<semn> ::= - | + | secv-vida (ε)
+<numar_real> ::= <numar_real_fara_mod> | <numar_real_fara_mod><modificator_tip_real>
+<numar_real_fara_mod> ::= <numar_intreg>.<numar_pozitiv> | <numar_intreg> | <numar_intreg>.<numar_pozitiv>e<numar_intreg> | <numar_intreg> 
+<modificator_tip_real> ::= L | l | F | f
+
+<numar_binar> ::= <semn>0b<sir_cifre_binare>
+<sir_cifre_binare> ::= <cifra_binara> | <cifra_binara><sir_cifre_binare>
+<cifra_binara> ::= 0 | 1
+
+<numar_hexa> ::= <semn>0x<sir_cifre_hexa>
+<sir_cifre_hexa> ::= <cifra_hexa> | <cifra_hexa><sir_cifre_hexa>
+<cifra_hexa> ::= [0-9ABCDEFabcdef]
+
+<numar_octal> ::= <semn>0<sir_cifre_octal>
+<sir_cfre_octal> ::= <cifra_octal> | <cifra_octal><sir_cifre_octal>
+<cifra_octal> ::= [0-7]
+
+
+-- TIPURI DE DATE --
+<tip_de_date> ::= int | float | om
+
+<definire_struct> ::= struct <sir_caractere>{<declaratii>};
+<declaratii> ::= <declarare> | <declarare>;<declaratii>
+
+-- ATRIBUIRE --
+<atribuire> ::= <id> = <expr>;
+<expr> ::= <id> | <const> | <id> <op> <expr>  | <const> <op> <expr>
+<op> ::= + | - | * | / | % 
+
+-- INTRARE --
+<intrare> ::= cin >> <lista_intrare>;
+<lista_intrare> ::= <id> | <id> >> <lista_intrare> 
+
+-- IESIRE --
+<iesire> ::= cout << <lista_iesire>;
+<lista_iesire> ::= <id> | <id> << <lista_iesire> | <const> | <const> << <lista_iesire>
+
+-- CONDITIONALA --
+<conditional> ::= if(<conditie>){<lista_instructiuni>} | if(<conditie>){<lista_instructiuni>}else{<lista_instructiuni>}
+<conditie> ::= <expr_logica> | <expr_logica><op_logic><conditie>
+<expr_logica> ::= <expr> | <expr><comparare><expr>
+<comparare> ::= < | > | >= | <= | == | !=
+<op_logic> ::= && | ||
+
+
+-- CICLARE --
+<ciclare> ::= <pentru> | <cat_timp>
+<pentru> ::= for(<atribuire>; <conditie>; <atribuire>){<lista_instructiuni>}
+<cat_timp> ::= while(<conditie>){<lista_instructiuni>}
+
+-- DECLARARE --
+<declarare> ::= <tip_de_date> <lista_id>;
+<lista_id> ::= <id> | <id>,<lista_id>
+
+----- Semnat Matei ------
+
+<ciclare_extinsa> ::= <ciclare> | <do_while>
+<do_while> ::= do { <lista_instructiuni> }while(<conditie>);
+
+
+
+-------------------------
+
+
+[2]. Programe sursa
+
+-- ARIE SI PERIMETRU CERC --
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    float area, perimeter;
+    float pi;
+    pi = 3.14;
+
+    float radius;
+    cin >> radius;
+
+    area = pi * radius * radius;
+    perimeter = 2 * pi * radius;
+
+    cout << area << ' ' << perimeter;
+
+    return 0;
+
+}
+
+-- CMMDC --
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b;
+    cin >> a >> b;
+
+    int r;
+    while (b != 0) {
+        r = a % b;
+        a = b;
+        b = r;
+    }
+
+    cout << a;
+
+    return 0;
+
+}
+
+-- SUMA A N NUMERE --
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n, nr, suma;
+
+    cin >> n;
+
+    suma = 0;
+    int i;
+    for (i = 0; i < n; i = i + 1) {
+        cin >> nr;
+        suma = suma + nr;
+    }
+
+    cout << suma;
+
+    return 0;
+}
+
+[3]. Programe cu eroare
+-- DOUA ERORI SI IN MLP SI IN LIBAJUL ORIGINAL -- 
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b   /// nu contine ; in declaratie ( expected a ';' )
+
+    if () {   /// contine o secventa vida ceea ce nu constituie o expresie valida ( expected an expression )
+        cout << 0;
+    }
+
+    return 0;
+}
+
+
+-- DOUA ERORI DOAR IN MLP -- 
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int nr;
+    int i;
+    for (i = 0; i < 50; i++) { /// eroare in MLP deaorece ++ nu este recunoscut ca operator
+        cout << i << ' ';
+    }
+
+    bool exists;  /// eroare in MLP deoarece <tip_de_date> nu contine bool
+    if (exists) {
+        cout << 1;
+    }
+    else {
+        cout << 0;
+    }
+
+    return 0;
+}

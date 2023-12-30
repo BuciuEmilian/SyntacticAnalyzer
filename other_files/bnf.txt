@@ -1,0 +1,49 @@
+@program@ ::= #include <iostream>@end_line@using namespace std; int main() {@instructiuni@ return 0;}
+@end_line@ ::= \n
+@instructiuni@ ::= @instructiune@ | @instructiune@@instructiuni@
+@instructiune@ ::= @declarare@ | @intrare@ | @iesire@ | @atribuire@ | @ciclare@ | @conditional@
+
+
+@declarare@ ::= @type@ @variabile@;
+@type@ ::= int | double
+@variabile@ ::= @variabila@ | @variabila@, @variabile@
+@variabila@ ::= @nume_variabila@
+
+@nume_variabila@ ::= @sir_de_litere@@sir_de_cifre@
+@sir_de_litere@ ::= @litera@ | @litera@@sir_de_litere@
+@litera@ ::= a | b | ... | z | A |z B | ... | Z
+
+@sir_de_cifre@ ::= @cifra@ | @cifra@@sir_de_cifre@
+@cifra@ ::= 0 | @cifra_nenula@
+@cifra_nenula@ ::= 1 | 2 | ... | 9
+
+
+@intrare@ ::= cin >> @lista_variabile_intrare@;
+@lista_variabile_intrare@ ::= @variabile@ | @variabile@ >> @lista_variabile_intrare@
+
+
+@iesire@ ::= cout << @lista_variabile_iesire@;
+@lista_variabile_iesire@ ::= @variabila_iesire@ | @variabila_iesire@ << @lista_variabile_iesire@
+@variabila_iesire@ ::= @variabila@ | @string_literal@
+@string_literal@ ::= "@sir_de_caractere@"
+@sir_de_caractere@ ::= @caracter@ | @caracter@@sir_de_caractere@
+@caracter@ ::= @litera@ | @cifra@ | @semn@
+@semn@ ::= ! | @ | # | $ | % | ^ | & | * | ( | ) | - | _ | + | = | [ | ] | \ |  | ...
+
+
+@atribuire@ ::= @variabila@ = @valoare_atribuire@;
+@valoare_atribuire@ ::= @expresie@ | @numar@ | @variabila@
+@numar@ ::= @intreg@ | @zecimal@
+@intreg@ ::= @cifra_nenula@ | @cifra@@intreg@
+@zecimal@ ::= @intreg@.@sir_de_cifre@
+@expresie@ ::= @valoare@ | @valoare@ @operator@ @expresie@
+@valoare@ ::= @numar@ | @variabila@
+@operator@ ::= + | - | * | / | %
+
+@ciclare@ ::= while (@conditie@) { @instructiuni@ }
+@conditie@ ::= @valoare@ @comparator@ @valoare@
+@comparator@ ::= != | == | @ | @ | @= | @=
+
+@conditional@ ::= @if@ | @if_else@
+@if@ ::= if (@conditie@) { @instructiuni@ }
+@if_else@ ::= @if@ else { @intructiuni@ }
