@@ -14,10 +14,13 @@ public class Grammar {
     private HashMap<String, List<List<Symbol>>> parseGrammar(List<String> lines) {
         HashMap<String, List<List<Symbol>>> rules = new HashMap<>();
         for (String line : lines) {
+            if (line.isEmpty()) {
+                continue;
+            }
             String[] components = line.split("::=");
             String aux = components[0].strip();
             String symbol = aux.substring(1, aux.length() - 1);
-            String result = components[1].strip();
+            String result = components[1].replaceAll(" ", "");
             if (startSymbol == null) {
                 this.startSymbol = new Symbol(symbol, SymbolType.NONTERMINAL);
             }

@@ -39,13 +39,23 @@ public class Main {
         System.out.println(adr.analyse(grammar, "+-++-"));
     }
 
+    public static void test_cpp1() throws Exception {
+        List<String> lines = Files.readAllLines(Path.of("inputs/cpp.txt"));
+        Grammar grammar = new Grammar(lines);
+        ADR2 adr = new ADR2();
+        List<String> inp_lines = Files.readAllLines(Path.of("C:\\Proiecte SSD\\Python\\Lab5LFTC\\outputs\\output_file.txt"));
+        System.out.println(adr.analyse(grammar, inp_lines.get(0)
+                ));
+    }
+
     public static void main(String[] args) {
         try {
-            test1();
+//            test1();
 //            test2();
 //            test3();
 //            test4();
 //            test5();
+            test_cpp1();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
