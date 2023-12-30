@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-222.4554.10">
+    <data-source name="bugsbunny@baxbaniidb.c7vcmmeeoba6.eu-north-1.rds.amazonaws.com" uuid="fe75a97d-d3c5-4c1e-b42d-b88dfd8bd3f9">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MSSQL" exact-version="0" />
+      <secret-storage>forget</secret-storage>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>
